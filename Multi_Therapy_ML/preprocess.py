@@ -123,21 +123,19 @@ def preprocess_data(file_path, cramer_threshold=0.75):
                 to_drop.add(col_b)
         except Exception:
             continue
+    for col in cramer_matrix.columns:
+        cramer_matrix.loc[col, col] = 1.0
 
     cramer_matrix = cramer_matrix.astype(float)
-    print(f"(Not Dropping!) Cramér's V > {cramer_threshold}: {sorted(to_drop)}")
+    print(f" Cramér's V > {cramer_threshold}: {sorted(to_drop)}")
 
     reduced_df = df_encoded.select_dtypes(include=[np.number])
     if target_column in reduced_df.columns:
         reduced_df = reduced_df.drop(columns=[target_column])
 
-    corr_matrix = reduced_df.corr(method='pearson').abs()
-    print("Pearson Correlation Matrix:\n", corr_matrix)
-
     plt.figure(figsize=(14, 12))
-    sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt=".2f")
-    plt.title("Correlation Heatmap of Numerical Features (No Dropping)")
+    sns.heatmap(cramer_matrix.astype(float), annot=True, cmap='YlGnBu', fmt=".2f")
+    plt.title("Cramér’s V Heatmap of Categorical Features")
     plt.tight_layout()
     plt.show()
-
-    return df_filled, df_encoded, reduced_df, cramer_matrix, corr_matrix, to_drop
+    return df_filled, df_encoded, reduced_df

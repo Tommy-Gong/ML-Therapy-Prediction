@@ -22,7 +22,7 @@ from pipeline_utils import (
 )
 
 file_path = "/Users/kegong/Desktop/Work/studiendaten_f__r_similarity_analyse_neu.xlsx"
-df_filled, df_encoded, reduced_df, _, _, _ = preprocess_data(file_path)
+df_filled, df_encoded, reduced_df = preprocess_data(file_path)
 
 
 
@@ -49,7 +49,7 @@ X_multi = StandardScaler().fit_transform(X_multi)
 
 X_train_m, X_test_m, y_train_m, y_test_m = train_test_split(X_multi, y, test_size=0.4, random_state=42)
 
-#  Multi-label Baseline 
+
 baseline_results = run_multilabel_baseline(
     X={'train': X_train_m, 'test': X_test_m},
     y={'train': y_train_m, 'test': y_test_m}
@@ -57,7 +57,7 @@ baseline_results = run_multilabel_baseline(
 print("\nMulti-Label Baseline Comparison")
 print(baseline_results)
 
-# LabelPowerset Feature Importance 
+
 lp_model = LabelPowerset(RandomForestClassifier(n_estimators=100, random_state=42))
 lp_model.fit(X_train_m, y_train_m)
 lp_feature_importance_df = get_labelpowerset_feature_importance(
@@ -66,7 +66,7 @@ lp_feature_importance_df = get_labelpowerset_feature_importance(
 print("\n LabelPowerset Feature Importances")
 print(lp_feature_importance_df.head(20))
 
-# LabelPowerset Grid Search
+ 
 grid_search = run_labelpowerset_gridsearch(X_train_m, y_train_m)
 
 print("\nLabelPowerset GridSearch Best Params")

@@ -20,7 +20,7 @@ from correlation_visualizer import top_pairs
 
 
 file_path = "/Users/kegong/Desktop/Work/studiendaten_f__r_similarity_analyse_neu.xlsx"
-df_filled, df_encoded, reduced_df, cramer_matrix, pearson_corr_matrix, to_drop = preprocess_data(file_path)
+df_filled, df_encoded, reduced_df, cramer_matrix, pearson_corr_matrix = preprocess_data(file_path)
 
 print("full data shape:", df_filled.shape)
 print("encode data shape:", df_encoded.shape)
