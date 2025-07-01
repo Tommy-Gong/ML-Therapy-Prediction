@@ -16,7 +16,9 @@ def encode_target(df_encoded, target_column):
     return y_encoded, le
 
 def prepare_features(df_encoded, reduced_df, target_column=None):
-    X = df_encoded[reduced_df.columns]
+    # X = df_encoded[reduced_df.columns]
+    valid_cols = reduced_df.columns.intersection(df_encoded.columns)
+    X = df_encoded[valid_cols]
     if target_column and target_column in X.columns:
         X = X.drop(columns=[target_column])
     scaler = StandardScaler()

@@ -282,6 +282,7 @@ def preprocess_data(
     plt.tight_layout()
     plt.show()
 
+    
 
     df_encoded = df_filled.copy()
     exclude_cols = ['Todesdatum', 'Progress Datum', 'Nachsorge Datum', col1, col2]
@@ -297,5 +298,12 @@ def preprocess_data(
 
     df_encoded = df_encoded.drop(columns=list(to_drop), errors='ignore')
     df_encoded.to_excel(output_encoded, index=False)
+
+    # for col in df_encoded.columns:
+    #     if df_encoded[col].dtype == 'object' and col not in [col1, col2]:
+    #         le = LabelEncoder()
+    #         df_encoded[col] = df_encoded[col].astype(str).fillna('Missing')
+    #         df_encoded[col] = le.fit_transform(df_encoded[col])
+    
 
     return df_filled, df_encoded, cramer_matrix, filtered_matrix, to_drop

@@ -21,6 +21,7 @@ from correlation_visualizer import top_pairs
 
 file_path = "/Users/kegong/Desktop/Work/studiendaten_f__r_similarity_analyse_neu.xlsx"
 df_filled, df_encoded, reduced_df, cramer_matrix, pearson_corr_matrix = preprocess_data(file_path)
+reduced_df = df_encoded.select_dtypes(include=[np.number])
 
 print("full data shape:", df_filled.shape)
 print("encode data shape:", df_encoded.shape)
@@ -28,7 +29,10 @@ print("high correlation column removed shape:", reduced_df.shape)
 
 
 target_column = 'Wirkstoffschema adjuvante Therapie'
-X_lazy = df_encoded[reduced_df.columns]
+# X_lazy = df_encoded[reduced_df.columns]
+valid_cols = reduced_df.columns.intersection(df_encoded.columns)
+X_lazy = df_encoded[valid_cols]
+
 y_lazy = df_encoded[target_column]
 
 X_train, X_test, y_train, y_test = train_test_split(X_lazy, y_lazy, test_size=0.4, random_state=42)
@@ -45,7 +49,7 @@ results = run_pipeline(
     target_column='Wirkstoffschema neoadjuvante Therapie',
     model_type='extratree',
     test_size=0.2,
-    top_n_features=5
+    top_n_features=20
 )
 
 corr_matrix, top_pairs = top_pairs(reduced_df, top_n=5)
